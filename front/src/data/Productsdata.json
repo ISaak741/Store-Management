@@ -1,0 +1,27 @@
+[
+  { "id": 1, "productsName": "milka", "price": "280", "quantity": "501" },
+  { "id": 2, "productsName": "maxon", "price": "70", "quantity": "502" },
+  { "id": 3, "productsName": "obtila", "price": "70", "quantity": "504" },
+  { "id": 4, "productsName": "morjan", "price": "400", "quantity": "504" },
+  { "id": 5, "productsName": "momonte", "price": "200", "quantity": "505" },
+  { "id": 6, "productsName": "ngawas", "price": "120", "quantity": "506" },
+  { "id": 7, "productsName": "jubter", "price": "110", "quantity": "507" },
+  { "id": 8, "productsName": "daily", "price": "80", "quantity": "508" },
+  { "id": 9, "productsName": "condia", "price": "150", "quantity": "509" },
+  {
+    "id": 10,
+    "productsName": "abo sofaine",
+    "price": "60",
+    "quantity": "5010"
+  },
+  { "id": 11, "productsName": "maxon1", "price": "100.", "quantity": "5011" },
+  { "id": 12, "productsName": "maxon2", "price": "100", "quantity": "5012" },
+  { "id": 13, "productsName": "maxon3", "price": "100", "quantity": "5013" },
+  { "id": 14, "productsName": "maxon4", "price": "100", "quantity": "5014" },
+  { "id": 15, "productsName": "maxon5", "price": "100", "quantity": "5015" },
+  { "id": 16, "productsName": "maxon6", "price": "100", "quantity": "5016" },
+  { "id": 17, "productsName": "maxon7", "price": "100", "quantity": "5017" },
+  { "id": 18, "productsName": "maxon8", "price": "100", "quantity": "5018" },
+  { "id": 19, "productsName": "maxon9", "price": "100", "quantity": "5019" },
+  { "id": 20, "productsName": "maxon10", "price": "100.", "quantity": "5020" }
+]

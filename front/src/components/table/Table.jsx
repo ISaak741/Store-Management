@@ -1,0 +1,83 @@
+/* eslint-disable react/prop-types */
+import { BiEdit, BiTrash } from "react-icons/bi";
+import Tooltip from "../tools/Tooltip";
+
+const Table = ({
+  products,
+  columns,
+  currentPage,
+  handlePageChange,
+  totalProducts,
+  productsPerPage,
+  handleUpdateClick,
+}) => {
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+  return (
+    <div className="w-full mt-4 overflow-x-auto">
+      <table className="w-full bg-white border border-gray-200 divide-y divide-gray-200">
+        <thead className="bg-violet-400 dark:text-gray-900">
+          <tr>
+            {columns.map((col) => (
+              <th key={col.accessor} className="pt-2 pb-3 pl-6 text-center">
+                {col.Header}
+              </th>
+            ))}
+            <th className="pt-2 pb-3 pl-6 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr
+              key={product.id}
+              className={`text-center ${
+                product.id % 2 === 0
+                  ? "bg-violet-200 dark:text-gray-900"
+                  : "bg-violet-100 dark:text-gray-900"
+              } hover:bg-violet-300`}
+            >
+              {columns.map((col) => (
+                <td key={col.accessor} className="pt-2 pb-2 pl-6">
+                  {product[col.accessor]}
+                </td>
+              ))}
+              <td className="pt-2 pb-2 pl-6 flex justify-center items-center">
+                <Tooltip position="left" content=" Update">
+                  <BiEdit
+                    className="text-yellow-600 text-2xl cursor-pointer"
+                    onClick={() => handleUpdateClick(product)}
+                  />{" "}
+                </Tooltip>
+                <Tooltip position="right" content=" Delete">
+                  <BiTrash className="text-red-600 ml-2 text-2xl cursor-pointer" />
+                </Tooltip>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="pagination flex flex-row mt-5 justify-center">
+        <button
+          className="block rounded-lg bg-gradient-to-tr from-violet-800 to-violet-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </button>
+        <span className="text-lg mx-2">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className="block rounded-lg bg-gradient-to-tr from-violet-800 to-violet-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Table;
