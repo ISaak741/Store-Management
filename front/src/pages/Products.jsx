@@ -72,12 +72,12 @@ const Products = () => {
       <div className="flex gap-4 items-center">
         <div className="relative">
           <input
-            className="p-3 w-48 lg:w-96 text-lg text-gray-900 border border-gray-300 rounded-full pl-9 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
+            className="p-2 w-48 lg:w-80 text-lg text-gray-900 border border-gray-300 rounded-full pl-9 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
             type="text"
             placeholder="Search anything"
             onChange={handleSearch}
           />
-          <BiSearch className="absolute left-3 top-4 text-2xl text-gray-500" />
+          <BiSearch className="absolute left-3 top-3 text-2xl text-gray-500" />
         </div>
         <label htmlFor="ProductsPerPage" className="text-lg">
           Products Per Page:

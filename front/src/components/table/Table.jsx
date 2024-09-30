@@ -15,8 +15,8 @@ const Table = ({
 
   return (
     <div className="w-full mt-4 overflow-x-auto">
-      <table className="w-full bg-white border border-gray-200 divide-y divide-gray-200">
-        <thead className="bg-violet-400 dark:text-gray-900">
+      <table className="w-full bg-white">
+        <thead className="bg-violet-300 dark:text-white dark:bg-gray-500">
           <tr>
             {columns.map((col) => (
               <th key={col.accessor} className="pt-2 pb-3 pl-6 text-center">
@@ -30,11 +30,12 @@ const Table = ({
           {products.map((product) => (
             <tr
               key={product.id}
-              className={`text-center ${
-                product.id % 2 === 0
-                  ? "bg-violet-200 dark:text-gray-900"
-                  : "bg-violet-100 dark:text-gray-900"
-              } hover:bg-violet-300`}
+              // className={`text-center ${
+              //   product.id % 2 === 0
+              //     ? "bg-violet-200 dark:text-gray-900"
+              //     : "bg-violet-100 dark:text-gray-900"
+              // } hover:bg-violet-200`}
+              className="text-center bg-violet-100 hover:bg-violet-200 dark:hover:bg-gray-300 dark:hover:text-gray-900 dark:text-gray-50 dark:bg-gray-400 "
             >
               {columns.map((col) => (
                 <td key={col.accessor} className="pt-2 pb-2 pl-6">
