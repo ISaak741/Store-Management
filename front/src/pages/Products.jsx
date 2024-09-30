@@ -84,7 +84,7 @@ const Products = () => {
         </label>
         <select
           id="ProductsPerPage"
-          className="text-lg focus:outline-none dark:text-gray-900 focus:ring-offset-1 focus:ring focus:ring-violet-500 border-violet-400 border rounded-lg"
+          className="text-lg focus:outline-none text-gray-500 dark:text-gray-400 dark:bg-gray-700 focus:ring-offset-1 focus:ring focus:ring-violet-500 border-gray-300 dark:border-gray-600 border rounded-lg"
           value={productsPerPage}
           onChange={handleProductsPerPageChange}
         >
