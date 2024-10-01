@@ -16,19 +16,19 @@ const Table = ({
   return (
     <>
       <div className="overflow-hidden rounded-lg border border-gray-200  dark:border-gray-600 shadow-md m-5 mb-2 w-full">
-        <table className="w-full border-collapse bg-white text-left text-sm text-gray-400">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+        <table className="w-full border-collapse bg-white text-left text-gray-700">
+          <thead className="bg-gray-100 dark:bg-gray-700">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.accessor}
                   scope="col"
-                  className="px-6 py-4 font-bold text-gray-400"
+                  className="px-6 py-4 font-bold text-gray-700"
                 >
                   {col.Header}
                 </th>
               ))}
-              <th scope="col" className="px-6 py-4  font-bold text-gray-400">
+              <th scope="col" className="px-6 py-4  font-bold text-gray-700">
                 Action
               </th>
             </tr>
@@ -45,14 +45,14 @@ const Table = ({
                 className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-650"
               >
                 {columns.map((col) => (
-                  <td key={col.accessor} className="px-6 py-4 text-lg">
+                  <td key={col.accessor} className="px-6 py-4">
                     {product[col.accessor]}
                   </td>
                 ))}
                 <td className="px-6 py-4  flex justify-start items-center">
                   <Tooltip position="left" content=" Update">
                     <BiEdit
-                      className="text-yellow-600 text-2xl cursor-pointer"
+                      className="text-green-600 text-2xl cursor-pointer"
                       onClick={() => handleUpdateClick(product)}
                     />{" "}
                   </Tooltip>
