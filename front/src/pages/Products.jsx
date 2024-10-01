@@ -65,36 +65,38 @@ const Products = () => {
     <div className="flex flex-col justify-center items-center">
       <button
         onClick={handleAddClick}
-        className="text-white flex mr-2 items-center bg-violet-500 hover:bg-violet-800 p-2 rounded self-end"
+        className="text-white flex mr-2 items-center bg-violet-500 hover:bg-violet-800 px-4 py-2 rounded-md self-end"
       >
         Add Product
       </button>
-      <div className="flex gap-4 items-center">
-        <div className="relative">
+      <div className="flex w-full justify-center items-center my-5">
+        <div className="mr-32">
           <input
-            className="p-2 w-48 lg:w-80 text-lg text-gray-900 border border-gray-300 rounded-full pl-9 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
+            className="py-2 px-3 w-48 lg:w-80 text-md text-gray-900 border border-gray-300 rounded-full pl-9 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
             type="text"
             placeholder="Search anything"
             onChange={handleSearch}
           />
           <BiSearch className="absolute left-3 top-3 text-2xl text-gray-500" />
         </div>
-        <label htmlFor="ProductsPerPage" className="text-lg">
-          Products Per Page:
-        </label>
-        <select
-          id="ProductsPerPage"
-          className="text-lg focus:outline-none text-gray-500 dark:text-gray-400 dark:bg-gray-700 focus:ring-offset-1 focus:ring focus:ring-violet-500 border-gray-300 dark:border-gray-600 border rounded-lg"
-          value={productsPerPage}
-          onChange={handleProductsPerPageChange}
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-          <option value={30}>30</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
+        <div className="flex items-center">
+          <label htmlFor="ProductsPerPage" className="text-md font-light text-gray-700 mr-5">
+            Products Per Page :
+          </label>
+          <select
+            id="ProductsPerPage"
+            className="text-lg bg-white px-3 py-1 focus:outline-none text-gray-500 dark:text-gray-400 dark:bg-gray-700 focus:ring-offset-1 focus:ring focus:ring-violet-500 border-gray-300 dark:border-gray-600 border rounded-lg"
+            value={productsPerPage}
+            onChange={handleProductsPerPageChange}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={30}>30</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
       </div>
 
       <Table
