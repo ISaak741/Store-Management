@@ -77,6 +77,7 @@ const Products = () => {
             placeholder="Search anything"
             onChange={handleSearch}
           />
+
           <BiSearch className="absolute left-3 top-2.5 text-2xl text-gray-500" />
         </div>
         <div className="flex items-center">
