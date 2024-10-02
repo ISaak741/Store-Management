@@ -70,17 +70,17 @@ const Products = () => {
         Add Product
       </button>
       <div className="flex w-full justify-center items-center my-5">
-        <div className="mr-32">
+        <div className="mr-32 relative">
           <input
             className="py-2 px-3 w-48 lg:w-80 text-md text-gray-900 border border-gray-300 rounded-full pl-9 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
             type="text"
             placeholder="Search anything"
             onChange={handleSearch}
           />
-          <BiSearch className="absolute left-3 top-3 text-2xl text-gray-500" />
+          <BiSearch className="absolute left-3 top-3 text-lg text-gray-500" />
         </div>
         <div className="flex items-center">
-          <label htmlFor="ProductsPerPage" className="text-md font-light text-gray-700 mr-5">
+          <label htmlFor="ProductsPerPage" className="text-md font-light dark:text-white text-gray-700 mr-5">
             Products Per Page :
           </label>
           <select
