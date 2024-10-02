@@ -23,12 +23,12 @@ const Table = ({
                 <th
                   key={col.accessor}
                   scope="col"
-                  className="px-6 py-4 font-bold text-gray-700"
+                  className="px-6 py-4 font-bold text-gray-700 dark:text-white"
                 >
                   {col.Header}
                 </th>
               ))}
-              <th scope="col" className="px-6 py-4  font-bold text-gray-700">
+              <th scope="col" className="px-6 py-4  font-bold text-gray-700 dark:text-white">
                 Action
               </th>
             </tr>
@@ -42,7 +42,7 @@ const Table = ({
                 //     ? "bg-violet-200 dark:text-gray-900"
                 //     : "bg-violet-100 dark:text-gray-900"
                 // } hover:bg-violet-200`}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-650"
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-650 dark:text-white"
               >
                 {columns.map((col) => (
                   <td key={col.accessor} className="px-6 py-4">
