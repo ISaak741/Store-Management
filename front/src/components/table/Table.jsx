@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { BiEdit, BiTrash } from "react-icons/bi";
+import { BiTrash } from "react-icons/bi";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 import Tooltip from "../tools/Tooltip";
 
 const Table = ({
@@ -12,7 +13,6 @@ const Table = ({
   handleUpdateClick,
 }) => {
   const totalPages = Math.ceil(totalProducts / productsPerPage);
-
   return (
     <>
       <div className="overflow-hidden rounded-lg border border-gray-200  dark:border-gray-600 shadow-md m-5 mb-2 w-full">
@@ -23,12 +23,15 @@ const Table = ({
                 <th
                   key={col.accessor}
                   scope="col"
-                  className="px-6 py-4 font-bold text-gray-700 dark:text-white"
+                  className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400"
                 >
                   {col.Header}
                 </th>
               ))}
-              <th scope="col" className="px-6 py-4  font-bold text-gray-700 dark:text-white">
+              <th
+                scope="col"
+                className="px-6 py-4  font-bold text-gray-700 dark:text-gray-400"
+              >
                 Action
               </th>
             </tr>
@@ -45,19 +48,22 @@ const Table = ({
                 className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-650 dark:text-white"
               >
                 {columns.map((col) => (
-                  <td key={col.accessor} className="px-6 py-4">
+                  <td
+                    key={col.accessor}
+                    className="px-6 py-4 dark:text-gray-400"
+                  >
                     {product[col.accessor]}
                   </td>
                 ))}
                 <td className="px-6 py-4  flex justify-start items-center">
                   <Tooltip position="left" content=" Update">
-                    <BiEdit
-                      className="text-green-600 text-2xl cursor-pointer"
+                    <MdOutlineModeEditOutline
+                      className="text-emerald-600 text-xl cursor-pointer"
                       onClick={() => handleUpdateClick(product)}
                     />{" "}
                   </Tooltip>
                   <Tooltip position="right" content=" Delete">
-                    <BiTrash className="text-red-600 ml-2 text-2xl cursor-pointer" />
+                    <BiTrash className="text-red-600 ml-2 text-xl cursor-pointer" />
                   </Tooltip>
                 </td>
               </tr>
