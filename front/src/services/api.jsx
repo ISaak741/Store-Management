@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "",
+  baseURL: "http://127.0.0.1:8000/api",
 });
 
 export const setAuthToken = (token) => {
@@ -12,13 +12,17 @@ export const setAuthToken = (token) => {
   }
 };
 
-export const login = async (username, password) => {
-  const response = await api.post("/login", { username, password });
+export const login = async (name, password) => {
+  const response = await api.post("/login", {
+    name: name,
+    password: password,
+  });
   return response.data;
 };
 
 export const logout = async () => {
-  await api.post("/logout");
+  const response = await api.post("/logout");
+  return response.data;
 };
 
 export default api;
