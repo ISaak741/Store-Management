@@ -2,13 +2,13 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { login } from "../services/api";
 import { FaSignInAlt } from "react-icons/fa";
-
+import { Navigate } from "react-router-dom";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login: loginContext } = useContext(AuthContext);
   const [error, setError] = useState(null);
-
+  const { authToken } = useContext(AuthContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -23,6 +23,9 @@ export default function Login() {
       console.error(err);
     }
   };
+  if (authToken) {
+    return <Navigate to="/" />;
+  }
   return (
     <div className=" max-w-lg mx-auto mt-36 border border-gray-200 bg-white p-8 rounded-xl shadow-lg shadow-slate-300 dark:shadow-gray-950">
       <div className="text-center">
