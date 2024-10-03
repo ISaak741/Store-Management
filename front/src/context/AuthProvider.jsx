@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, logout, setAuthToken } from "../services/api";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({ authToken: null });
 
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthTokenState] = useState(
