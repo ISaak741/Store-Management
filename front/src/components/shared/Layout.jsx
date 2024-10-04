@@ -1,11 +1,9 @@
-import { Outlet, Navigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Header from "./Header";
 import SideBar from "./SideBar";
-import { AuthContext } from "../../context/AuthProvider";
 
 export default function Layout() {
-  const { authToken } = useContext(AuthContext);
   const [darkMode, setDarkMode] = useState(() => {
     const storedTheme = localStorage.getItem("theme");
     return storedTheme ? storedTheme === "dark" : false;
@@ -25,13 +23,9 @@ export default function Layout() {
     setDarkMode((prevMode) => !prevMode);
   };
 
-  if (!authToken) {
-    return <Navigate to="/login" />;
-  }
-
   return (
     <div
-      className={`min-h-screen w-screen overflow-hidden grid grid-cols-[64px_1fr] lg:grid-cols-[256px_1fr] grid-rows-[auto_1fr] font-quickSand ${
+      className={`h-screen w-screen overflow-hidden grid grid-cols-[64px_1fr] lg:grid-cols-[256px_1fr] grid-rows-[auto_1fr] font-quickSand ${
         darkMode ? "dark" : ""
       }`}
     >
