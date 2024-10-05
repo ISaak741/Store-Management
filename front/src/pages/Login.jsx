@@ -2,13 +2,11 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { login } from "../services/api";
 import { FaSignInAlt } from "react-icons/fa";
-
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login: loginContext } = useContext(AuthContext);
   const [error, setError] = useState(null);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

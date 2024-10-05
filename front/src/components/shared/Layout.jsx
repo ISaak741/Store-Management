@@ -25,7 +25,7 @@ export default function Layout() {
 
   return (
     <div
-      className={`min-h-screen w-screen overflow-hidden grid grid-cols-[64px_1fr] lg:grid-cols-[256px_1fr] grid-rows-[auto_1fr] font-quickSand ${
+      className={`h-screen w-screen overflow-hidden grid grid-cols-[64px_1fr] lg:grid-cols-[256px_1fr] grid-rows-[auto_1fr] font-quickSand ${
         darkMode ? "dark" : ""
       }`}
     >

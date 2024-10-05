@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,24 +9,34 @@ import { AuthProvider, AuthContext } from "./context/AuthProvider";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import Login from "./pages/Login";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { PublicRoute } from "./routes/PublicRoute";
 
 function App() {
-  const { authToken } = useContext(AuthContext);
   return (
     <Router>
       <AuthProvider>
         <Routes>
           <Route
             path="/login"
-            element={authToken ? <Navigate to="/" /> : <Login />}
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
           />
           <Route
             path="/"
-            element={authToken ? <Layout /> : <Navigate to="/login" />}
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
           >
             <Route index element={<Products />} />
             <Route path="order" element={<Orders />} />
           </Route>
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </AuthProvider>
     </Router>
