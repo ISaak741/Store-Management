@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listProduct, setAuthToken } from "../services/api";
+import { listProduct, setAuthToken, add, updateProduct } from "../services/api";
 import { BiSearch } from "react-icons/bi";
 import Table from "../components/table/Table";
 import Modal from "../components/table/Modal";
@@ -32,22 +32,22 @@ const Products = () => {
       return;
     }
 
-    const fetchProducts = async () => {
-      try {
-        const response = await listProduct();
-        if (response.success) {
-          setProducts(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setError("Failed to fetch products.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await listProduct();
+      if (response.success) {
+        setProducts(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setError("Failed to fetch products.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUpdateClick = (product) => {
     setSelectedProduct(product);
@@ -61,6 +61,7 @@ const Products = () => {
   const handleCloseModal = () => {
     setShowProductUpdate(false);
     setShowProductAdd(false);
+    setSelectedProduct(null);
   };
 
   const handleSearch = (e) => {
@@ -76,6 +77,33 @@ const Products = () => {
   const handleProductsPerPageChange = (e) => {
     setProductsPerPage(Number(e.target.value));
     setCurrentPage(1);
+  };
+
+  const handleAddProduct = async (formData) => {
+    try {
+      await add(formData.name, formData.quantity, formData.price);
+      setShowProductAdd(false);
+      fetchProducts();
+    } catch (error) {
+      console.error("Error adding product:", error);
+      setError("Failed to add product.");
+    }
+  };
+
+  const handleUpdateProduct = async (formData) => {
+    try {
+      await updateProduct(
+        selectedProduct.id,
+        formData.name,
+        formData.price,
+        formData.quantity
+      );
+      setShowProductUpdate(false);
+      fetchProducts();
+    } catch (error) {
+      console.error("Error updating product:", error);
+      setError("Failed to update product.");
+    }
   };
 
   const filteredProducts = products.filter(
@@ -154,11 +182,16 @@ const Products = () => {
           product={selectedProduct}
           handleCloseModal={handleCloseModal}
           title="Update Product"
+          onSubmit={handleUpdateProduct}
         />
       )}
 
       {showProductAdd && (
-        <Modal handleCloseModal={handleCloseModal} title="Add Product" />
+        <Modal
+          handleCloseModal={handleCloseModal}
+          title="Add Product"
+          onSubmit={handleAddProduct}
+        />
       )}
     </div>
   );
