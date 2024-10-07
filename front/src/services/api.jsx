@@ -39,11 +39,11 @@ export const listProduct = async () => {
   return response.data;
 };
 
-export const updateProduct = async (id, name, quantity, price) => {
+export const updateProduct = async (id, name, price, quantity) => {
   const response = await api.put(`/products/${id}`, {
     name: name,
-    quantity: quantity,
     price: price,
+    quantity: quantity,
   });
   return response.data;
 };

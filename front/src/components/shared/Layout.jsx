@@ -30,7 +30,7 @@ export default function Layout() {
       }`}
     >
       <div className="col-span-2">
-        <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+        <Header toggledarkMode={toggleDarkMode} darkMode={darkMode} />
       </div>
       <div className="row-start-2">
         <SideBar />
