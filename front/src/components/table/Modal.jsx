@@ -17,7 +17,7 @@ const Modal = ({ product, handleCloseModal, title }) => (
         <input
           id="productName"
           type="text"
-          defaultValue={product?.productsName || ""}
+          defaultValue={product?.name || ""}
           placeholder={product ? "" : "Enter product name"}
           className="relative mb-3 bg-gray-50 ring-0 w-full outline-none border border-neutral-500 text-neutral-900 placeholder-violet-500 text-sm rounded-lg focus:ring-violet-500 focus:ring-offset-1 focus:ring-2 block p-2.5"
         />

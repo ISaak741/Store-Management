@@ -1,23 +1,54 @@
-import { useState } from "react";
-import productsdata from "../data/Productsdata.json";
+import { useEffect, useState } from "react";
+import { listProduct, setAuthToken } from "../services/api";
 import { BiSearch } from "react-icons/bi";
 import Table from "../components/table/Table";
 import Modal from "../components/table/Modal";
+
 const Products = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [products, setProducts] = useState(productsdata);
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showProductUpdate, setShowProductUpdate] = useState(false);
   const [showProductAdd, setShowProductAdd] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage, setProductsPerPage] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const columns = [
     { Header: "ID", accessor: "id" },
-    { Header: "Product Name", accessor: "productsName" },
+    { Header: "Product Name", accessor: "name" },
     { Header: "Price", accessor: "price" },
     { Header: "Quantity", accessor: "quantity" },
   ];
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setAuthToken(token);
+    } else {
+      setLoading(false);
+      return;
+    }
+
+    const fetchProducts = async () => {
+      try {
+        const response = await listProduct();
+        if (response.success) {
+          setProducts(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setError("Failed to fetch products.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const handleUpdateClick = (product) => {
     setSelectedProduct(product);
     setShowProductUpdate(true);
@@ -49,9 +80,9 @@ const Products = () => {
 
   const filteredProducts = products.filter(
     (product) =>
-      product.productsName.toLowerCase().includes(searchTerm) ||
-      product.price.toLowerCase().includes(searchTerm) ||
-      product.quantity.toLowerCase().includes(searchTerm)
+      product.name.toLowerCase().includes(searchTerm) ||
+      product.price.toString().includes(searchTerm) ||
+      product.quantity.toString().includes(searchTerm)
   );
 
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -61,6 +92,14 @@ const Products = () => {
     indexOfLastProduct
   );
 
+  if (loading) {
+    return <div>Loading products...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className="flex flex-col justify-center items-center">
       <button
@@ -69,6 +108,7 @@ const Products = () => {
       >
         Add Product
       </button>
+
       <div className="flex w-full justify-center items-center my-5">
         <div className="mr-32 relative">
           <input
@@ -77,9 +117,9 @@ const Products = () => {
             placeholder="Search anything"
             onChange={handleSearch}
           />
-
           <BiSearch className="absolute left-3 top-2.5 text-2xl text-gray-500" />
         </div>
+
         <div className="flex items-center">
           <label className="text-md font-light text-gray-700 mr-5 dark:text-gray-400">
             Products Per Page :

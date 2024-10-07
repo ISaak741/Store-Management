@@ -25,4 +25,27 @@ export const logout = async () => {
   return response.data;
 };
 
+export const add = async (name, quantity, price) => {
+  const response = await api.post("/products", {
+    name: name,
+    quantity: quantity,
+    price: price,
+  });
+  return response.data;
+};
+
+export const listProduct = async () => {
+  const response = await api.get("/products");
+  return response.data;
+};
+
+export const updateProduct = async (id, name, quantity, price) => {
+  const response = await api.put(`/products/${id}`, {
+    name: name,
+    quantity: quantity,
+    price: price,
+  });
+  return response.data;
+};
+
 export default api;
