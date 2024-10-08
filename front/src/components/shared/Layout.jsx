@@ -35,7 +35,7 @@ export default function Layout() {
       <div className="row-start-2">
         <SideBar />
       </div>
-      <div className="row-start-2 col-start-2 dark:text-gray-50 text-gray-900 bg-gray-50 dark:bg-gray-800 p-4 overflow-auto">
+      <div className="relative row-start-2 col-start-2 dark:text-gray-50 text-gray-900 bg-gray-50 dark:bg-gray-800 p-4 overflow-auto">
         <Outlet />
       </div>
     </div>

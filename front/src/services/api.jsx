@@ -48,4 +48,9 @@ export const updateProduct = async (id, name, price, quantity) => {
   return response.data;
 };
 
+export const deleteProduct = async (id) => {
+  const response = await api.delete(`/products/${id}`);
+  return response.data;
+};
+
 export default api;
