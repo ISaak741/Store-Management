@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { login } from "../services/api";
 import { FaSignInAlt } from "react-icons/fa";
-
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,15 +10,15 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await login({ username, password });
+      const response = await login(username, password);
       if (response.success) {
-        loginContext();
+        loginContext(username, password);
       } else {
         setError(response.message);
       }
-      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError("Login failed. Please try again.");
+      console.error(err);
     }
   };
   return (
@@ -36,7 +35,7 @@ export default function Login() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:ring-offset-2 focus:ring focus:border-violet-500 focus:ring-violet-500 hover:shadow"
+              className="w-full py-3 border border-slate-200 rounded-lg px-3 text-gray-900 focus:outline-none focus:ring-offset-2 focus:ring focus:border-violet-500 focus:ring-violet-500 hover:shadow"
               placeholder="Enter Username"
             />
           </label>
@@ -46,7 +45,7 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:ring-offset-2 focus:ring focus:border-violet-500 focus:ring-violet-500 hover:shadow"
+              className="w-full py-3 border border-slate-200 rounded-lg px-3 text-gray-900 focus:outline-none focus:ring-offset-2 focus:ring focus:border-violet-500 focus:ring-violet-500 hover:shadow"
               placeholder="Enter your password"
             />
           </label>

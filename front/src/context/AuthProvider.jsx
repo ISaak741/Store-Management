@@ -13,12 +13,14 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogin = async (username, password) => {
     try {
-      const data = await login(username, password);
-      const token = data.token;
-      localStorage.setItem("token", token);
-      setAuthTokenState(token);
-      setAuthToken(token);
-      navigate("/");
+      const response = await login(username, password);
+      if (response.success) {
+        const token = response.token;
+        localStorage.setItem("token", token);
+        setAuthTokenState(token);
+        setAuthToken(token);
+        navigate("/");
+      }
     } catch (error) {
       console.error("Login error", error.message);
     }
@@ -26,11 +28,13 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      setAuthTokenState(null);
-      setAuthToken(null);
-      localStorage.removeItem("token");
-      navigate("/login");
+      const response = await logout();
+      if (response.success) {
+        setAuthTokenState(null);
+        localStorage.removeItem("token");
+        setAuthToken(null);
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Logout error", error.message);
     }

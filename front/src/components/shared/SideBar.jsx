@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import { FaSignOutAlt, FaProductHunt } from "react-icons/fa";
@@ -7,11 +7,9 @@ import Tooltip from "../tools/Tooltip";
 
 export default function SideBar() {
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login");
   };
 
   return (
