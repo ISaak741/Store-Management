@@ -14,6 +14,7 @@ const Products = () => {
   const [productsPerPage, setProductsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const columns = [
     { Header: "ID", accessor: "id" },
@@ -105,6 +106,10 @@ const Products = () => {
       setError("Failed to update product.");
     }
   };
+  const showSuccessMessage = (message) => {
+    setSuccessMessage(message);
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
 
   const filteredProducts = products.filter(
     (product) =>
@@ -121,7 +126,14 @@ const Products = () => {
   );
 
   if (loading) {
-    return <div>Loading products...</div>;
+    return (
+      <div className="text-center absolute m-auto left-0 top-0 right-0 bottom-0 grid place-items-center">
+        <div className="flex-col gap-4 w-full flex items-center justify-center">
+          <p className="text-xl text-violet-400">Loading products</p>
+          <div className="w-28 h-28 border-8 animate-spin border-violet-200 flex items-center justify-center border-t-violet-600 rounded-full"></div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -130,6 +142,13 @@ const Products = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
+      {successMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
+          <div className="bg-green-100 p-6 rounded-lg shadow-lg">
+            <div className="  text-green-700 p-4">{successMessage}</div>
+          </div>
+        </div>
+      )}
       <button
         onClick={handleAddClick}
         className="text-white flex mr-2 items-center bg-violet-500 hover:bg-violet-800 px-4 py-2 rounded-md self-end"
@@ -157,12 +176,11 @@ const Products = () => {
             value={productsPerPage}
             onChange={handleProductsPerPageChange}
           >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={30}>30</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
+            {[5, 10, 20, 30, 50, 100].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -175,8 +193,9 @@ const Products = () => {
         totalProducts={filteredProducts.length}
         productsPerPage={productsPerPage}
         handleUpdateClick={handleUpdateClick}
+        fetchProducts={fetchProducts}
+        showSuccessMessage={showSuccessMessage}
       />
-
       {showProductUpdate && (
         <Modal
           product={selectedProduct}
