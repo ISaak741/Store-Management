@@ -98,7 +98,7 @@ const Table = ({
             {sortedProducts.map((product) => (
               <tr
                 key={product.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-650 dark:text-white"
+                className="hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-650 dark:text-white"
               >
                 {columns.map(({ accessor }) => (
                   <td key={accessor} className="px-6 py-4  dark:text-gray-400">
