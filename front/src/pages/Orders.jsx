@@ -1,188 +1,288 @@
-import { BiSearch } from "react-icons/bi";
 import { useState } from "react";
-import { listProduct } from "../services/api";
+import { Link } from "react-router-dom";
+import { BiSearch } from "react-icons/bi";
+import { MdOutlineModeEditOutline } from "react-icons/md";
+import { BiTrash } from "react-icons/bi";
 import Tooltip from "../components/tools/Tooltip";
+import EditOrderModal from "../components/order/EditOrderModal";
+import DeleteModal from "../components/table/DeleteModal";
 
 export default function Orders() {
-  const [input, setInput] = useState("");
-  const [results, setResults] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ordersPerPage, setOrdersPerPage] = useState(5);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [orderToDelete, setOrderToDelete] = useState(null);
 
-  const fetchData = async (value) => {
-    try {
-      const response = await listProduct();
-      const products = response.data;
-      if (Array.isArray(products)) {
-        const filteredResults = products.filter((product) => {
-          return (
-            value &&
-            product &&
-            product.name &&
-            product.name.toLowerCase().includes(value.toLowerCase())
-          );
-        });
-        setResults(filteredResults);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+    // Dummy data for demonstration
+    const [orders, setOrders] = useState([
+        {
+            id: 1,
+            date: "2024-01-15",
+            total: 1500,
+            status: "Completed",
+            customer: "John Doe",
+        },
+        {
+            id: 2,
+            date: "2024-01-16",
+            total: 2300,
+            status: "Pending",
+            customer: "Jane Smith",
+        },
+        {
+            id: 3,
+            date: "2024-01-17",
+            total: 890,
+            status: "Processing",
+            customer: "Mike Johnson",
+        },
+        {
+            id: 4,
+            date: "2024-01-18",
+            total: 1750,
+            status: "Completed",
+            customer: "Sarah Williams",
+        },
+        {
+            id: 5,
+            date: "2024-01-19",
+            total: 3200,
+            status: "Cancelled",
+            customer: "Tom Brown",
+        },
+        {
+            id: 6,
+            date: "2024-01-19",
+            total: 3200,
+            status: "Cancelled",
+            customer: "said",
+        },
+    ]);
 
-  const handleChange = (value) => {
-    setInput(value);
-    fetchData(value);
-  };
+    const getStatusColor = (status) => {
+        switch (status.toLowerCase()) {
+            case "completed":
+                return "bg-green-100 text-green-800";
+            case "pending":
+                return "bg-yellow-100 text-yellow-800";
+            case "processing":
+                return "bg-blue-100 text-blue-800";
+            case "cancelled":
+                return "bg-red-100 text-red-800";
+            default:
+                return "bg-gray-100 text-gray-800";
+        }
+    };
 
-  const handleAddProduct = (product) => {
-    const existingProduct = selectedProducts.find((p) => p.id === product.id);
-    if (existingProduct) {
-      setSelectedProducts(
-        selectedProducts.map((p) =>
-          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-        )
-      );
-    } else {
-      setSelectedProducts([...selectedProducts, { ...product, quantity: 1 }]);
-    }
-  };
+    const handleEditClick = (order) => {
+        setSelectedOrder(order);
+    };
 
-  const handleIncreaseQuantity = (id) => {
-    setSelectedProducts(
-      selectedProducts.map((p) =>
-        p.id === id ? { ...p, quantity: p.quantity + 1 } : p
-      )
+    const handleDeleteClick = (order) => {
+        setOrderToDelete(order);
+        setShowDeleteModal(true);
+    };
+
+    const handleUpdateOrder = (updatedOrder) => {
+        setOrders(
+            orders.map((order) =>
+                order.id === updatedOrder.id ? updatedOrder : order
+            )
+        );
+        setSelectedOrder(null);
+    };
+
+    const handleDeleteOrder = () => {
+        setOrders(orders.filter((order) => order.id !== orderToDelete.id));
+        setShowDeleteModal(false);
+        setOrderToDelete(null);
+    };
+
+    const filteredOrders = orders.filter(
+        (order) =>
+            order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.status.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  };
 
-  const handleDecreaseQuantity = (id) => {
-    setSelectedProducts(
-      selectedProducts
-        .map((p) => (p.id === id ? { ...p, quantity: p.quantity - 1 } : p))
-        .filter((p) => p.quantity > 0)
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = filteredOrders.slice(
+        indexOfFirstOrder,
+        indexOfLastOrder
     );
-  };
+    const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
-  const calculateTotalPerProduct = (price, quantity) => {
-    return price * quantity;
-  };
-
-  const calculateTotalPrice = () => {
-    return selectedProducts.reduce(
-      (total, product) => total + product.price * product.quantity,
-      0
-    );
-  };
-
-  return (
-    <div className="flex w-full justify-center flex-col items-center my-5">
-      <div className="relative">
-        <input
-          className="py-2 px-3 w-48 lg:w-[27rem] text-md text-gray-900 border border-gray-300 rounded-full pl-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
-          type="text"
-          placeholder="Search Products"
-          value={input}
-          onChange={(e) => handleChange(e.target.value)}
-        />
-        <BiSearch className="absolute left-3 top-2.5 text-2xl text-gray-500" />
-      </div>
-
-      {results.length > 0 ? (
-        <ul className="py-2 px-3 mt-3 w-48 lg:w-[27rem] text-md max-h-72 overflow-y-auto text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white custom-scrollbar">
-          {results.map((result) => (
-            <li
-              key={result.id}
-              className="p-3 flex justify-between cursor-pointer items-center border-none rounded-lg dark:text-gray-400 dark:hover:bg-gray-600 transition-colors hover:bg-gray-100"
-            >
-              <span> {result.name}</span>
-              <button
-                className="text-white bg-violet-500 hover:bg-violet-800 px-3 py-1 rounded-md"
-                onClick={() => handleAddProduct(result)}
-              >
-                Add
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center text-gray-500 mt-3"></p>
-      )}
-
-      {selectedProducts.length > 0 && (
-        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600 shadow-md m-5 mb-2 w-full">
-          <table className="w-full border-collapse bg-white text-left text-gray-700">
-            <thead className="bg-gray-100 dark:bg-gray-700">
-              <tr>
-                <th className="px-6  py-4 font-bold text-gray-700 dark:text-gray-400">
-                  Product Name
-                </th>
-                <th className="px-6  py-4 font-bold text-gray-700 dark:text-gray-400">
-                  Price
-                </th>
-                <th className="px-6  py-4 font-bold text-gray-700 dark:text-gray-400">
-                  Quantity
-                </th>
-                <th className="px-6  py-4 font-bold text-gray-700 dark:text-gray-400">
-                  Total Price
-                </th>
-                <th className="px-6  py-4 font-bold text-gray-700 dark:text-gray-400">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-600 border-t border-gray-100 dark:border-gray-600">
-              {selectedProducts.map((product) => (
-                <tr
-                  key={product.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-650 dark:text-white"
+    return (
+        <div className="flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+                    Order Management
+                </h1>
+                <Link
+                    className="text-white flex items-center bg-violet-500 hover:bg-violet-800 px-4 py-2 rounded-md transition-colors"
+                    to="/AddOrder"
                 >
-                  <td className="px-6 py-4 dark:text-gray-400">
-                    {product.name}
-                  </td>
-                  <td className="px-6 py-4 dark:text-gray-400">
-                    {product.price.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 dark:text-gray-400">
-                    {product.quantity}
-                  </td>
-                  <td className="px-6 py-4 dark:text-gray-400">
-                    {calculateTotalPerProduct(
-                      product.price,
-                      product.quantity
-                    ).toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 flex justify-start items-center">
-                    <Tooltip position="left" content="Add">
-                      <button
-                        className="bg-emerald-600 text-white px-2 py-1 rounded-md hover:bg-emerald-800"
-                        onClick={() => handleIncreaseQuantity(product.id)}
-                      >
-                        +
-                      </button>
-                    </Tooltip>
-                    <Tooltip position="right" content="Delete">
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-700"
-                        onClick={() => handleDecreaseQuantity(product.id)}
-                      >
-                        -
-                      </button>
-                    </Tooltip>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    Add Order
+                </Link>
+            </div>
 
-          <div className="py-3 text-right pr-10 text-lg font-semibold bg-gray-100 dark:bg-gray-700  border-t border-gray-100 dark:border-gray-600">
-            <span className="text-gray-700 dark:text-gray-400">
-              Total Order Price:
-            </span>
-            <span className="text-gray-700 dark:text-gray-400">
-              {calculateTotalPrice().toFixed(2)}DA
-            </span>
-          </div>
+            <div className="flex justify-between items-center mb-6">
+                <div className="relative">
+                    <input
+                        className="py-2 px-3 w-48 lg:w-80 text-md text-gray-900 border border-gray-300 rounded-full pl-9 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-offset-1 focus:ring focus:ring-violet-500"
+                        type="text"
+                        placeholder="Search orders..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <BiSearch className="absolute left-3 top-2.5 text-2xl text-gray-500" />
+                </div>
+
+                <div className="flex items-center">
+                    <label className="text-md font-light text-gray-700 mr-5 dark:text-gray-400">
+                        Orders Per Page:
+                    </label>
+                    <select
+                        className="text-lg bg-white px-3 py-1 focus:outline-none text-gray-500 dark:text-gray-400 dark:bg-gray-700 focus:ring-offset-1 focus:ring focus:ring-violet-500 border-gray-300 dark:border-gray-600 border rounded-lg"
+                        value={ordersPerPage}
+                        onChange={(e) =>
+                            setOrdersPerPage(Number(e.target.value))
+                        }
+                    >
+                        {[5, 10, 20, 30, 50].map((num) => (
+                            <option key={num} value={num}>
+                                {num}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600 shadow-md">
+                <table className="w-full border-collapse bg-white text-left text-gray-700 dark:bg-gray-800">
+                    <thead className="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400">
+                                Order ID
+                            </th>
+                            <th className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400">
+                                Date
+                            </th>
+                            <th className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400">
+                                Customer
+                            </th>
+                            <th className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400">
+                                Total
+                            </th>
+                            <th className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400">
+                                Status
+                            </th>
+                            <th className="px-6 py-4 font-bold text-gray-700 dark:text-gray-400">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 dark:divide-gray-600 border-t border-gray-100 dark:border-gray-600">
+                        {currentOrders.map((order) => (
+                            <tr
+                                key={order.id}
+                                className="hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-650 dark:text-white"
+                            >
+                                <td className="px-6 py-4 dark:text-gray-400">
+                                    #{order.id}
+                                </td>
+                                <td className="px-6 py-4 dark:text-gray-400">
+                                    {order.date}
+                                </td>
+                                <td className="px-6 py-4 dark:text-gray-400">
+                                    {order.customer}
+                                </td>
+                                <td className="px-6 py-4 dark:text-gray-400">
+                                    ${order.total.toFixed(2)}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-sm ${getStatusColor(
+                                            order.status
+                                        )}`}
+                                    >
+                                        {order.status}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 flex items-center space-x-3">
+                                    <Tooltip position="left" content="Edit">
+                                        <button
+                                            className="text-emerald-600 hover:text-emerald-800"
+                                            onClick={() =>
+                                                handleEditClick(order)
+                                            }
+                                        >
+                                            <MdOutlineModeEditOutline className="text-xl" />
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip position="right" content="Delete">
+                                        <button
+                                            className="text-red-600 hover:text-red-800"
+                                            onClick={() =>
+                                                handleDeleteClick(order)
+                                            }
+                                        >
+                                            <BiTrash className="text-xl" />
+                                        </button>
+                                    </Tooltip>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="flex justify-center mt-6">
+                <div className="flex space-x-2">
+                    <button
+                        className="block rounded-lg bg-gradient-to-tr from-violet-800 to-violet-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        onClick={() =>
+                            setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <span className="text-lg mx-2">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        className="block rounded-lg bg-gradient-to-tr from-violet-800 to-violet-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        onClick={() =>
+                            setCurrentPage((prev) =>
+                                Math.min(prev + 1, totalPages)
+                            )
+                        }
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            {selectedOrder && (
+                <EditOrderModal
+                    order={selectedOrder}
+                    onClose={() => setSelectedOrder(null)}
+                    onUpdate={handleUpdateOrder}
+                />
+            )}
+
+            {showDeleteModal && (
+                <DeleteModal
+                    title="Delete Order"
+                    content={`Are you sure you want to delete order #${orderToDelete.id}?`}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={handleDeleteOrder}
+                />
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
